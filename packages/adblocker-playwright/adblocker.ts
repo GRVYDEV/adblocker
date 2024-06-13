@@ -80,7 +80,11 @@ export class BlockingContext {
       //  easily be added if Playwright implements the required capability.
       //
       // Register callback for network requests filtering.
-      await this.page.route('**/*', this.onRequest);
+      if (!this.page.isClosed()) {
+        await this.page.route('**/*', this.onRequest);
+      } else {
+        console.log('Skipping route for closed page');
+      }
     }
   }
 
